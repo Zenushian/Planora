@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Planora by Kashio Studio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230ea5e9'/><path d='M50 15 L60 40 L85 50 L60 60 L50 85 L40 60 L15 50 L40 40 Z' fill='white'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f9ff;
+    --card:#ffffff;
+    --primary:#0ea5e9;
+    --primary-hover:#0284c7;
+    --primary-soft:#e0f2fe;
+    --text:#0f172a;
+    --text-muted:#64748b;
+    --line:#e2e8f0;
+    --radius:16px;
+    --shadow-sm:0 2px 8px rgba(14,165,233,.05);
+    --shadow-md:0 8px 24px rgba(14,165,233,.08);
+    --shadow-lg:0 12px 32px rgba(14,165,233,.12);
+  }
+
+  /* 🌙 KOYU MOD (DARK MODE) */
+  body.dark-mode {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --primary: #0ea5e9;
+    --primary-hover: #38bdf8;
+    --primary-soft: rgba(14, 165, 233, 0.15);
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --line: #334155;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,.2);
+    --shadow-md: 0 8px 24px rgba(0,0,0,.3);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+  body{
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+    min-height:100vh;
+    padding:24px 16px 80px;
+    -webkit-font-smoothing:antialiased;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .app{max-width:900px;margin:0 auto;}
+
+  /* ---------- ÜST BAR ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:32px;
+    flex-wrap:wrap; gap:16px;
+  }
+  .logo-group{display:flex;align-items:center;gap:14px;}
+  
+  .flag-svg{
+    width:38px;height:28px;border-radius:4px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    border:1px solid var(--line); flex:none;
+  }
+
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-mark{
+    width:44px;height:44px;border-radius:12px;
+    display:grid;place-items:center;
+    background:var(--primary);
+    color:#fff;
+    box-shadow:var(--shadow-md);
+  }
+  .logo-mark svg{width:24px;height:24px;}
+  .logo-title{font-size:20px;font-weight:800;letter-spacing:-.5px;}
+  .logo-sub{font-size:12px;color:var(--text-muted);font-weight:500;}
+
+  /* Sağ Üst Kontroller */
+  .top-controls { display: flex; gap: 10px; align-items: center; }
+
+  .lang-switch{
+    display:flex;align-items:center;gap:4px;
+    background:var(--card);border:1px solid var(--line);
+    padding:4px;border-radius:10px;box-shadow:var(--shadow-sm);
+  }
+  .lang-btn{
+    font-family:inherit;font-size:12px;font-weight:700;
+    color:var(--text-muted);background:transparent;
+    border:none;padding:6px 12px;border-radius:6px;
+    cursor:pointer;transition:all .2s;
+  }
+  .lang-btn:hover{color:var(--text);}
+  .lang-btn.active{background:var(--primary-soft);color:var(--primary-hover);}
+
+  /* Tema Butonu */
+  .theme-toggle {
+    background: var(--card); border: 1px solid var(--line);
+    color: var(--text-muted); border-radius: 10px;
+    width: 38px; height: 38px;
+    display: grid; place-items: center; cursor: pointer;
+    box-shadow: var(--shadow-sm); transition: all .2s;
+  }
+  .theme-toggle:hover { color: var(--text); border-color: var(--primary-soft); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+
+  /* ---------- HERO ---------- */
+  .hero{margin-bottom:28px;}
+  .hero h1{
+    font-size:clamp(24px,5vw,34px);
+    font-weight:800;letter-spacing:-1px;line-height:1.2;
+    margin-bottom:10px;
+  }
+  .hero p{color:var(--text-muted);font-size:14.5px;max-width:540px;line-height:1.6;font-weight:500;}
+
+  /* ---------- KARTLAR ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:20px;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  .card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;}
+  .step-badge{
+    width:28px;height:28px;border-radius:8px;flex:none;
+    display:grid;place-items:center;
+    background:var(--primary-soft);color:var(--primary-hover);
+    font-size:13px;font-weight:800;
+  }
+  .card-title{font-size:16px;font-weight:700;letter-spacing:-.3px;margin-top:2px;}
+  .card-desc{font-size:12.5px;color:var(--text-muted);font-weight:500;margin-top:4px;line-height:1.5;}
+
+  /* ---------- GÜNLER ---------- */
+  .day-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(85px,1fr));
+    gap:10px;
+  }
+  .day-card{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:12px 8px;
+    cursor:pointer;
+    transition:all .2s cubic-bezier(.4,0,.2,1);
+    background:var(--card);
+    user-select:none;
+    position:relative;
+    overflow:hidden;
+  }
+  .day-card:hover{border-color:#bae6fd;background:var(--bg);}
+  body.dark-mode .day-card:hover{border-color:var(--primary);}
+  .day-card.active{
+    border-color:var(--primary);
+    background:var(--primary-soft);
+    box-shadow:inset 0 0 0 1px var(--primary);
+  }
+  .day-top{display:flex;align-items:center;justify-content:space-between;}
+  .day-name{font-size:13px;font-weight:700;color:var(--text);}
+  .day-tick{
+    font-size:10px;font-weight:800;color:#fff;
+    width:16px;height:16px;border-radius:4px;
+    display:grid;place-items:center;
+    background:var(--line);
+    transition:background .2s;
+  }
+  .day-card.active .day-tick{background:var(--primary);}
+  .day-hours{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:12px;gap:2px;
+    opacity:0;height:0;overflow:hidden;transition:all .2s;
+  }
+  .day-card.active .day-hours{opacity:1;height:24px;}
+  
+  .step{
+    width:22px;height:22px;border-radius:6px;flex:none;
+    border:1px solid var(--line);background:var(--card);color:var(--primary-hover);
+    font-size:14px;font-weight:800;line-height:1;
+    cursor:pointer;display:grid;place-items:center;
+    transition:all .15s;
+  }
+  .step:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+  /* Serbest Dakika Girişi */
+  .hval-wrap { 
+    display: flex; align-items: center; justify-content: center; 
+    gap: 2px; flex: 1;
+  }
+  .hval-input{
+    font-family:inherit; font-size:12px; font-weight:700; color:var(--primary-hover);
+    width: 38px; text-align: center; border: 1px solid transparent; 
+    border-radius: 4px; background: transparent; outline: none; transition: all .2s;
+    -moz-appearance: textfield;
+    padding: 2px 0;
+  }
+  .hval-input::-webkit-outer-spin-button,
+  .hval-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .hval-input:hover, .hval-input:focus{ border-color: var(--primary); background: var(--card); }
+  .hval-unit { font-size: 10px; font-weight: 700; color: var(--primary-hover); pointer-events:none; }
+
+  .total-line{
+    margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:13px;font-weight:600;color:var(--text-muted);
+  }
+  .total-line b{color:var(--primary-hover);font-size:15px;}
+
+  /* ---------- DERS EKLEME FORMU ---------- */
+  .subject-form{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    background:var(--bg);
+    padding:14px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    margin-bottom:16px;
+  }
+  .subject-form .input-full { grid-column: 1 / -1; }
+  
+  @media (max-width: 650px){
+    .subject-form{grid-template-columns:1fr; gap:8px;}
+  }
+
+  .input-custom{
+    font-family:inherit;font-size:13.5px;font-weight:600;color:var(--text);
+    border:1.5px solid var(--line);border-radius:10px;
+    padding:12px 14px;background:var(--card);outline:none;
+    transition:all .2s; width:100%;
+  }
+  .input-custom::placeholder{color:#94a3b8;font-weight:500;}
+  .input-custom:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);}
+  .input-custom:disabled { background:var(--bg); color:#94a3b8; cursor:not-allowed; border-style:dashed; }
+
+  /* --- TAMAMEN ÖZEL DROPDOWN --- */
+  .dropdown { position: relative; user-select: none; width:100%; }
+  .dropdown-selected {
+    font-family:inherit;font-size:13.5px;font-weight:600;color:var(--text);
+    border:1.5px solid var(--line);border-radius:10px;
+    padding:12px 32px 12px 14px;background:var(--card);outline:none;
+    cursor:pointer; transition:all .2s;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .dropdown-selected:hover { border-color:#bae6fd; }
+  .dropdown-selected::after {
+    content:''; position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    width:14px; height:14px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+    transition: transform .2s;
+  }
+  .dropdown.open .dropdown-selected::after { transform: translateY(-50%) rotate(180deg); }
+  .dropdown.open .dropdown-selected { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-soft); }
+  
+  .dropdown-list {
+    display:none; position:absolute; top:calc(100% + 4px); left:0; right:0;
+    background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); z-index:50; max-height:200px; overflow-y:auto;
+    padding:6px; margin:0; list-style:none;
+  }
+  .dropdown.open .dropdown-list { display:block; animation: fadeIn .15s ease; }
+  .dropdown-item {
+    padding:10px 12px; font-size:13px; font-weight:600; color:var(--text);
+    border-radius:8px; cursor:pointer; transition:background .15s;
+  }
+  .dropdown-item:hover { background:var(--primary-soft); color:var(--primary-hover); }
+  .dropdown-item.selected { background:var(--primary); color:#fff; }
+
+  .btn-add{
+    font-family:inherit;font-size:13.5px;font-weight:700;color:#fff;
+    background:var(--primary);border:none;border-radius:10px;
+    padding:12px 20px;cursor:pointer;transition:all .2s;
+    white-space:nowrap; grid-column: 1 / -1; margin-top:4px;
+  }
+  .btn-add:hover{background:var(--primary-hover); transform:translateY(-1px);}
+
+  /* Ders Listesi */
+  .subject-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .subject-item{
+    display:flex;align-items:center;gap:12px;
+    background:var(--bg);border:1px solid var(--line);
+    border-radius:10px;padding:12px 14px;
+    animation:fadeIn .3s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+  
+  .dot{width:10px;height:10px;border-radius:50%;flex:none;}
+  .sname{font-size:13.5px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  
+  .tags-wrap{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+  .tag{
+    font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:6px;
+    background:var(--line);color:var(--text-muted); white-space:nowrap;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+  .tag.lv4{background:#fff7ed;color:#c2410c;}
+  .tag.lv5{background:#fef2f2;color:#b91c1c;}
+  .tag.mode-soru{background:#ecfdf5;color:#047857;}
+  .tag.mode-karma{background:#f5f3ff;color:#6d28d9;}
+  .tag-target { background: #e0f2fe; color: #0284c7; }
+
+  /* Koyu Mod Etiket Renkleri */
+  body.dark-mode .tag.lv4 { background: rgba(194, 65, 12, 0.2); color: #fdba74; }
+  body.dark-mode .tag.lv5 { background: rgba(185, 28, 28, 0.2); color: #fca5a5; }
+  body.dark-mode .tag.mode-soru { background: rgba(4, 120, 87, 0.2); color: #6ee7b7; }
+  body.dark-mode .tag.mode-karma { background: rgba(109, 40, 217, 0.2); color: #c4b5fd; }
+  body.dark-mode .tag-target { background: rgba(14, 165, 233, 0.2); color: #bae6fd; }
+
+  .del{
+    border:none;background:transparent;color:var(--text-muted);
+    font-size:20px;line-height:1;cursor:pointer;padding:0 4px;
+    transition:color .15s;
+  }
+  .del:hover{color:#ef4444;}
+
+  .empty{
+    font-size:13px;color:var(--text-muted);font-weight:500;
+    text-align:center;padding:20px 0 10px;
+  }
+
+  /* ---------- AYARLAR ---------- */
+  .settings-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+  }
+  .setting-group{display:flex;flex-direction:column;gap:6px;}
+  .setting-group label{font-size:12.5px;font-weight:600;color:var(--text-muted);}
+
+  /* ---------- ANA BUTON ---------- */
+  .cta-wrap{text-align:center;margin:28px 0;}
+  .btn-generate{
+    font-family:inherit;font-size:15px;font-weight:800;letter-spacing:-.2px;
+    color:#fff;border:none;border-radius:12px;
+    padding:16px 48px;cursor:pointer;
+    background:var(--primary);
+    box-shadow:var(--shadow-lg);
+    transition:all .2s;
+    width:100%; max-width:320px;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .btn-generate:hover{background:var(--primary-hover);transform:translateY(-2px);}
+  .btn-generate:active{transform:translateY(0);}
+
+  .alert{
+    max-width:480px;margin:16px auto 0;
+    background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
+    font-size:13px;font-weight:600;border-radius:10px;padding:12px 16px;
+    text-align:center;
+  }
+  .alert-warning { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+
+  /* Koyu Mod Uyarı Renkleri */
+  body.dark-mode .alert { background: rgba(185, 28, 28, 0.15); border-color: rgba(185, 28, 28, 0.3); color: #fca5a5; }
+  body.dark-mode .alert-warning { background: rgba(180, 83, 9, 0.2); border-color: rgba(180, 83, 9, 0.4); color: #fcd34d; }
+
+  /* ---------- YÜKLENİYOR ---------- */
+  .loading{
+    display:none;text-align:center;padding:40px 20px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  }
+  .loading.show{display:block;animation:fadeIn .3s ease;}
+  .spinner{
+    width:40px;height:40px;margin:0 auto 16px;
+    border:3px solid var(--primary-soft);border-top-color:var(--primary);
+    border-radius:50%;animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-text{font-size:14px;font-weight:600;color:var(--text-muted);}
+
+  /* ---------- SONUÇ ---------- */
+  #result{margin-top:24px;}
+  .result-in{animation:fadeUp .4s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px;}
+  .stat{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:16px;box-shadow:var(--shadow-sm);
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .stat-num{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--primary-hover);}
+  .stat-label{font-size:11.5px;font-weight:600;color:var(--text-muted);margin-top:4px;}
+
+  .dist{margin-bottom:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow-sm);}
+  .dist-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .dist-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .dist-name{font-size:12.5px;font-weight:600;width:90px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .dist-track{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden;}
+  .dist-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+  .dist-val{font-size:11.5px;font-weight:700;color:var(--text-muted);width:55px;text-align:right;flex:none;}
+
+  .plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .day-block{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:16px;box-shadow:var(--shadow-sm);
+  }
+  .db-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+  .db-name{font-size:14.5px;font-weight:800;letter-spacing:-.3px;}
+  .db-meta{font-size:11px;font-weight:600;color:var(--text-muted);}
+  
+  .srow{display:flex;align-items:center;gap:10px;margin-bottom:8px; position:relative;}
+  .stime{
+    font-size:11px;font-weight:700;color:var(--text-muted);
+    width:86px;flex:none;font-variant-numeric:tabular-nums;
+  }
+  .spill{
+    flex:1;font-size:12px;font-weight:700;
+    padding:8px 10px;border-radius:8px;
+    border-left:3px solid;
+    display:flex;align-items:center;justify-content:space-between;gap:6px;
+    overflow:hidden;
+  }
+  .spill-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .spill-mode{font-size:10px;font-weight:800;opacity:0.8;text-transform:uppercase;flex:none;background:rgba(255,255,255,0.5);padding:2px 4px;border-radius:4px;}
+  body.dark-mode .spill-mode { background: rgba(0,0,0,0.2); }
+  
+  .check-box{
+    width:18px;height:18px;border-radius:5px;border:2px solid var(--line);
+    cursor:pointer;display:grid;place-items:center;flex:none;transition:all .2s;
+    background:var(--card);
+  }
+  .check-box:hover{border-color:var(--primary);}
+  .check-box.checked{background:var(--primary);border-color:var(--primary);}
+  .check-box svg{width:10px;height:10px;stroke:#fff;stroke-width:3;display:none;}
+  .check-box.checked svg{display:block;}
+  .srow.completed .spill-text{text-decoration:line-through;opacity:0.5;}
+
+  .sbreak{
+    font-size:10px;font-weight:600;color:var(--text-muted);
+    padding:2px 0 8px 96px;
+    display:flex;align-items:center;gap:4px;
+  }
+
+  .result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;justify-content:center;}
+  .btn-ghost{
+    font-family:inherit;font-size:13px;font-weight:700;
+    color:var(--primary-hover);background:var(--primary-soft);
+    border:none;border-radius:10px;padding:12px 20px;cursor:pointer;
+    transition:all .2s;display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn-ghost:hover{background:#bae6fd;transform:translateY(-1px);}
+  body.dark-mode .btn-ghost:hover { background: rgba(14, 165, 233, 0.3); }
+
+  /* ---------- FOOTER ---------- */
+  .footer-note{
+    text-align:center; font-size:12px; color:var(--text-muted);
+    font-weight:600; margin-top:50px;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .footer-divider{
+    width:40px; height:2px; background:var(--line); border-radius:2px; margin-bottom:8px;
+  }
+  .credit{
+    font-size:13px; color:var(--text-muted);
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
+  }
+  .credit a {
+    color: var(--primary);
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+  .credit a:hover {
+    color: var(--primary-hover);
+  }
+
+  @media print{
+    body{background:#fff; color:#0f172a;}
+    .no-print{display:none !important;}
+    .card,.day-block,.stat,.dist{box-shadow:none;border:1px solid #e2e8f0; background:#fff;}
+    .plan-grid{grid-template-columns:1fr 1fr;}
+    #result{margin-top:0;}
+    .check-box{border-color:#e2e8f0; background:#fff;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ÜST BAR -->
+  <header class="topbar no-print">
+    <div class="logo-group">
+      
+      <!-- Logo ve İsim -->
+      <div class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-title" data-i18n="logoTitle">Planora</div>
+          <div class="logo-sub" data-i18n="logoSub">Akıllı Planlayıcı</div>
+        </div>
+      </div>
+
+      <!-- ŞANLI TÜRK BAYRAĞIMIZ -->
+      <svg class="flag-svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <rect width="1200" height="800" fill="#E30A17"/>
+        <circle cx="425" cy="400" r="200" fill="#ffffff"/>
+        <circle cx="475" cy="400" r="160" fill="#E30A17"/>
+        <polygon points="583.3,400 600.3,331.9 668.7,331.9 614.4,373.9 635.7,442.3 583.3,400 530.9,442.3 552.2,373.9 497.9,331.9 566.3,331.9" fill="#ffffff"/>
+      </svg>
+
+    </div>
+
+    <div class="top-controls">
+      <!-- DİL DEĞİŞTİRİCİ -->
+      <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      
+      <!-- TEMA BUTONU -->
+      <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">
+        <!-- Ay İkonu (Koyu Mod için) -->
+        <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <!-- Güneş İkonu (Açık Mod için) -->
+        <svg id="sunIcon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero no-print">
+    <h1 data-i18n="heroTitle">Rotanı çiz,<br>hedefine odaklan.</h1>
+    <p data-i18n="heroDesc">Günlerini ve derslerini belirle. Sistem; zorluk, çalışma modu ve hedeflediğin soru sayısına göre sana en uygun haftalık rotayı oluştursun.</p>
+  </section>
+
+  <!-- 1. MÜSAİTLİK -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step-badge">1</div>
+      <div>
+        <div class="card-title" data-i18n="step1Title">Müsaitlik Durumu</div>
+        <div class="card-desc" data-i18n="step1Desc">Çalışabileceğin günleri seç ve o gün için hedeflediğin süreyi (dakika) belirle.</div>
+      </div>
+    </div>
+    <div class="day-grid" id="days"></div>
+    <div class="total-line">
+      <span data-i18n="totalHours">Toplam Müsaitlik</span>
+      <b id="totalHoursDisplay">0 dk</b>
+    </div>
+  </section>
+
+  <!-- 2. DERSLER -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step-badge">2</div>
+      <div>
+        <div class="card-title" data-i18n="step2Title">Dersler ve Hedefler</div>
+        <div class="card-desc" data-i18n="step2Desc">Ders bilgilerini gir. Mod "Soru" veya "Karma" ise hedef soru sayısını belirtebilirsin.</div>
+      </div>
+    </div>
+
+    <div class="subject-form">
+      <input id="subjectName" class="input-custom input-full" type="text" data-i18n-placeholder="placeholderSubject" placeholder="Ders adı (örn. Tarih)" maxlength="28">
+      
+      <!-- Özel Zorluk Dropdown -->
+      <div class="dropdown" id="dropdownLevel">
+        <div class="dropdown-selected" data-value="3">Orta Seviye</div>
+        <ul class="dropdown-list">
+          <li class="dropdown-item" data-value="1">Çok Kolay</li>
+          <li class="dropdown-item" data-value="2">Kolay</li>
+          <li class="dropdown-item selected" data-value="3">Orta Seviye</li>
+          <li class="dropdown-item" data-value="4">Zor</li>
+          <li class="dropdown-item" data-value="5">Çok Zor</li>
+        </ul>
+      </div>
+
+      <!-- Özel Mod Dropdown -->
+      <div class="dropdown" id="dropdownMode">
+        <div class="dropdown-selected" data-value="karma">Karma (Konu+Soru)</div>
+        <ul class="dropdown-list">
+          <li class="dropdown-item" data-value="konu">Sadece Konu</li>
+          <li class="dropdown-item" data-value="soru">Sadece Soru</li>
+          <li class="dropdown-item selected" data-value="karma">Karma (Konu+Soru)</li>
+        </ul>
+      </div>
+
+      <!-- Hedef Soru Sayısı -->
+      <input id="subjectQuestions" class="input-custom" type="number" data-i18n-placeholder="placeholderQuestions" placeholder="Hedef Soru (örn. 100)" min="0" max="2000" step="10">
+
+      <button class="btn-add" id="addSubject" data-i18n="btnAdd">Dersi Rotaya Ekle</button>
+    </div>
+
+    <ul class="subject-list" id="subjectList"></ul>
+  </section>
+
+  <!-- 3. AYARLAR -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step-badge">3</div>
+      <div>
+        <div class="card-title" data-i18n="step3Title">Çalışma Düzeni</div>
+        <div class="card-desc" data-i18n="step3Desc">Başlangıç saatini ve mola süresini belirle. Ders süresi, molanın 3 katı olarak otomatik hesaplanır.</div>
+      </div>
+    </div>
+    <div class="settings-grid">
+      <div class="setting-group">
+        <label for="startTime" data-i18n="startLabel">Başlangıç Saati</label>
+        <input id="startTime" type="time" class="input-custom" value="16:00">
+      </div>
+      <div class="setting-group">
+        <label for="breakDuration" data-i18n="breakLabel">Mola Süresi (dk)</label>
+        <input id="breakDuration" type="number" class="input-custom" value="15" min="5" max="30" step="5">
+      </div>
+      <div class="setting-group">
+        <label data-i18n="focusAutoLabel">Ders Süresi (otomatik)</label>
+        <input id="focusDisplay" type="text" class="input-custom" value="45 dk" disabled>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-wrap no-print">
+    <button class="btn-generate" id="generateBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.2 1.3L3 12l5.9 1.9a2 2 0 0 1 1.3 1.2L12 21l1.9-5.9a2 2 0 0 1 1.2-1.3L21 12l-5.9-1.9a2 2 0 0 1-1.3-1.2L12 3Z"></path></svg>
+      <span data-i18n="btnGenerate">Planı Oluştur</span>
+    </button>
+    <div id="alertBox"></div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText" data-i18n="loadingText">Planlama motoru çalışıyor…</div>
+  </div>
+
+  <section id="result"></section>
+
+  <!-- ALT KISIM -->
+  <div class="footer-note no-print">
+    <div class="footer-divider"></div>
+    <div data-i18n="footer">Planora · Daha verimli çalışmak için tasarlandı.</div>
+    <div class="credit" data-i18n="footerCredit">
+      <a href="https://kashiostudio.pages.dev" target="_blank">Kashio Studio</a> tarafından tasarlanmıştır.
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   TEMA YÖNETİMİ (KOYU / AÇIK MOD)
+   ========================================================= */
+const themeToggle = document.getElementById('themeToggle');
+const moonIcon = document.getElementById('moonIcon');
+const sunIcon = document.getElementById('sunIcon');
+
+function setTheme(isDark) {
+  if (isDark) {
+    document.body.classList.add('dark-mode');
+    moonIcon.style.display = 'none';
+    sunIcon.style.display = 'block';
+    localStorage.setItem('planora-theme', 'dark');
+  } else {
+    document.body.classList.remove('dark-mode');
+    moonIcon.style.display = 'block';
+    sunIcon.style.display = 'none';
+    localStorage.setItem('planora-theme', 'light');
+  }
+}
+
+// Başlangıçta temayı yükle
+const savedTheme = localStorage.getItem('planora-theme');
+if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  setTheme(true);
+} else {
+  setTheme(false);
+}
+
+themeToggle.addEventListener('click', () => {
+  setTheme(!document.body.classList.contains('dark-mode'));
+});
+
+/* =========================================================
+   DİL SÖZLÜĞÜ (i18n)
+   ========================================================= */
+const translations = {
+  tr: {
+    title: "Planora — Akıllı Çalışma Planlayıcı",
+    logoTitle: "Planora",
+    logoSub: "Akıllı Planlayıcı",
+    heroTitle: "Rotanı çiz,<br>hedefine odaklan.",
+    heroDesc: "Günlerini ve derslerini belirle. Sistem; zorluk, çalışma modu ve hedeflediğin soru sayısına göre sana en uygun haftalık rotayı oluştursun.",
+    step1Title: "Müsaitlik Durumu",
+    step1Desc: "Çalışabileceğin günleri seç ve o gün için hedeflediğin süreyi (dakika) belirle.",
+    totalHours: "Toplam Müsaitlik",
+    min: "dk",
+    step2Title: "Dersler ve Hedefler",
+    step2Desc: "Ders bilgilerini gir. Mod \"Soru\" veya \"Karma\" ise hedef soru sayısını belirtebilirsin.",
+    placeholderSubject: "Ders adı (örn. Tarih)",
+    placeholderQuestions: "Hedef Soru (örn. 100)",
+    disabledQuestions: "Sadece Konu Seçildi",
+    btnAdd: "Dersi Rotaya Ekle",
+    emptySubjects: "Henüz ders eklemedin. Hemen yukarıdan başla! 👆",
+    step3Title: "Çalışma Düzeni",
+    step3Desc: "Başlangıç saatini ve mola süresini belirle. Ders süresi, molanın 3 katı olarak otomatik hesaplanır.",
+    startLabel: "Başlangıç Saati",
+    focusAutoLabel: "Ders Süresi (otomatik)",
+    breakLabel: "Mola Süresi (dk)",
+    btnGenerate: "Planı Oluştur",
+    loadingText: "Planlama motoru çalışıyor…",
+    loadingMsgs: [
+      'Müsaitlik durumu analiz ediliyor…',
+      'Ders zorlukları tartılıyor…',
+      'Hedef soru sayıları bölüştürülüyor…',
+      'Molalar hesaplanıyor…',
+      'Rotan çiziliyor ✨'
+    ],
+    warnNotEnoughTime: 'Seçtiğin süre tüm derslere yetmiyor. Bazı dersler programa eklenemedi. Müsaitliğini artırmayı dene.',
+    statWeeklyHours: "Haftalık Net Çalışma",
+    statPlannedDays: "Planlanan Gün",
+    statSubjects: "Çalışılacak Ders",
+    statTotalSessions: "Toplam Seans",
+    distTitle: "📊 Derslere Göre Dağılım",
+    daySession: "seans",
+    breakText: "dk mola",
+    btnPrint: "PDF / Yazdır",
+    btnNewPlan: "Yeni Plan",
+    noteCheck: "* Derslerin yanındaki kutucuklara tıklayarak tamamlandı olarak işaretleyebilirsin.",
+    footer: "Planora · Daha verimli çalışmak için tasarlandı.",
+    footerCredit: '<a href="https://kashiostudio.pages.dev" target="_blank">Kashio Studio</a> tarafından tasarlanmıştır.',
+    errorDay: "Önce en az bir gün seçmelisin.",
+    errorSubject: "Rotanı oluşturmak için önce ders eklemelisin.",
+    errorMaxSubject: "Dengeli bir plan için en fazla 12 ders ekleyebilirsin.",
+    errorExistSubject: "Bu ders zaten rotanda var.",
+    levels: {1:'Çok Kolay', 2:'Kolay', 3:'Orta', 4:'Zor', 5:'Çok Zor'},
+    modes: {konu:'Konu', soru:'Soru', karma:'Karma'},
+    days: [
+      {short:'Pzt', full:'Pazartesi'}, {short:'Sal', full:'Salı'},
+      {short:'Çar', full:'Çarşamba'}, {short:'Per', full:'Perşembe'},
+      {short:'Cum', full:'Cuma'}, {short:'Cmt', full:'Cumartesi'},
+      {short:'Paz', full:'Pazar'}
+    ],
+    dropdownLevel: ["Çok Kolay", "Kolay", "Orta Seviye", "Zor", "Çok Zor"],
+    dropdownMode: ["Sadece Konu", "Sadece Soru", "Karma (Konu+Soru)"]
+  },
+  en: {
+    title: "Planora — Smart Study Planner",
+    logoTitle: "Planora",
+    logoSub: "Smart Planner",
+    heroTitle: "Chart your path,<br>focus on your goal.",
+    heroDesc: "Set your available days and subjects. The system will create the best weekly route based on difficulty, study mode, and target questions.",
+    step1Title: "Availability",
+    step1Desc: "Select the days you can study and set your target duration (minutes) for each day.",
+    totalHours: "Total Availability",
+    min: "min",
+    step2Title: "Subjects & Goals",
+    step2Desc: "Enter subject details. If mode is \"Questions\" or \"Mixed\", you can set a target question count.",
+    placeholderSubject: "Subject name (e.g. History)",
+    placeholderQuestions: "Target Questions (e.g. 100)",
+    disabledQuestions: "Only Topic Selected",
+    btnAdd: "Add Subject",
+    emptySubjects: "No subjects added yet. Start above! 👆",
+    step3Title: "Study Settings",
+    step3Desc: "Set start time and break duration. Focus time is auto-calculated as 3× the break.",
+    startLabel: "Start Time",
+    focusAutoLabel: "Focus (auto)",
+    breakLabel: "Break (min)",
+    btnGenerate: "Generate Plan",
+    loadingText: "Planning engine running…",
+    loadingMsgs: [
+      'Analyzing availability…',
+      'Weighing subject difficulties…',
+      'Distributing target questions…',
+      'Calculating breaks…',
+      'Drawing your route ✨'
+    ],
+    warnNotEnoughTime: 'Selected time is not enough for all subjects. Some subjects were left out. Try increasing availability.',
+    statWeeklyHours: "Weekly Net Study",
+    statPlannedDays: "Planned Days",
+    statSubjects: "Subjects",
+    statTotalSessions: "Total Sessions",
+    distTitle: "📊 Subject Distribution",
+    daySession: "sessions",
+    breakText: "min break",
+    btnPrint: "PDF / Print",
+    btnNewPlan: "New Plan",
+    noteCheck: "* Click the checkboxes next to subjects to mark them as completed.",
+    footer: "Planora · Designed for more efficient studying.",
+    footerCredit: 'Designed by <a href="https://kashiostudio.pages.dev" target="_blank">Kashio Studio</a>',
+    errorDay: "You must select at least one day.",
+    errorSubject: "You must add at least one subject.",
+    errorMaxSubject: "You can add up to 12 subjects for a balanced plan.",
+    errorExistSubject: "This subject is already in your route.",
+    levels: {1:'Very Easy', 2:'Easy', 3:'Medium', 4:'Hard', 5:'Very Hard'},
+    modes: {konu:'Topic', soru:'Questions', karma:'Mixed'},
+    days: [
+      {short:'Mon', full:'Monday'}, {short:'Tue', full:'Tuesday'},
+      {short:'Wed', full:'Wednesday'}, {short:'Thu', full:'Thursday'},
+      {short:'Fri', full:'Friday'}, {short:'Sat', full:'Saturday'},
+      {short:'Sun', full:'Sunday'}
+    ],
+    dropdownLevel: ["Very Easy", "Easy", "Medium", "Hard", "Very Hard"],
+    dropdownMode: ["Only Topic", "Only Questions", "Mixed (Topic+Q)"]
+  }
+};
+
+let currentLang = 'tr';
+let currentLevel = "3";
+let currentMode = "karma";
+let lastPlanData = null; 
+
+const PALETTE = [
+  '#0ea5e9','#8b5cf6','#10b981','#f59e0b','#ec4899',
+  '#6366f1','#14b8a6','#f97316','#06b6d4','#84cc16'
+];
+
+const state = {
+  days: translations['tr'].days.map(() => ({ selected:false, minutes:120 })),
+  subjects: [],
+  start: '16:00',
+  focus: 45,
+  break: 15
+};
+
+/* =========================================================
+   DOM ELEMENTLERİ
+   ========================================================= */
+const daysEl       = document.getElementById('days');
+const totalHoursEl = document.getElementById('totalHoursDisplay');
+const subjectListEl= document.getElementById('subjectList');
+const nameInput    = document.getElementById('subjectName');
+const questionsInput = document.getElementById('subjectQuestions');
+const addBtn       = document.getElementById('addSubject');
+const startInput   = document.getElementById('startTime');
+const breakInput   = document.getElementById('breakDuration');
+const focusDisplay = document.getElementById('focusDisplay');
+const generateBtn  = document.getElementById('generateBtn');
+const alertBox     = document.getElementById('alertBox');
+const loadingEl    = document.getElementById('loading');
+const loadingText  = document.getElementById('loadingText');
+const resultEl     = document.getElementById('result');
+
+/* =========================================================
+   DİL DEĞİŞTİRME FONKSİYONU
+   ========================================================= */
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+  });
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.innerHTML = t[key]; 
+  });
+  
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+
+  if (currentMode === 'konu') {
+    questionsInput.placeholder = t.disabledQuestions;
+  }
+
+  document.title = t.title;
+
+  const levelItems = document.querySelectorAll('#dropdownLevel .dropdown-item');
+  t.dropdownLevel.forEach((text, i) => { if(levelItems[i]) levelItems[i].textContent = text; });
+  
+  document.querySelector('#dropdownLevel .dropdown-selected').textContent = t.dropdownLevel[+currentLevel - 1];
+
+  const modeItems = document.querySelectorAll('#dropdownMode .dropdown-item');
+  t.dropdownMode.forEach((text, i) => { if(modeItems[i]) modeItems[i].textContent = text; });
+  
+  const modeKeys = ['konu', 'soru', 'karma'];
+  document.querySelector('#dropdownMode .dropdown-selected').textContent = t.dropdownMode[modeKeys.indexOf(currentMode)];
+
+  refreshFocusDisplay();
+  renderDays();
+  renderSubjects();
+
+  if (lastPlanData) {
+    renderPlan(lastPlanData);
+  }
+}
+
+/* =========================================================
+   DERS SÜRESİ (MOLADAN TÜRETİLİR)
+   ========================================================= */
+function refreshFocusDisplay(){
+  focusDisplay.value = state.focus + (currentLang === 'tr' ? ' dk' : ' min');
+}
+
+function applyBreakValue(){
+  state.break = Math.max(5, Math.min(30, +breakInput.value || 15));
+  breakInput.value = state.break;
+  state.focus = state.break * 3; // Pomodoro oranı: ders = mola × 3
+  refreshFocusDisplay();
+}
+
+breakInput.addEventListener('change', applyBreakValue);
+
+/* =========================================================
+   ÖZEL DROPDOWN MANTIĞI
+   ========================================================= */
+function setupDropdown(id, onChange) {
+  const dropdown = document.getElementById(id);
+  const selected = dropdown.querySelector('.dropdown-selected');
+  const items = dropdown.querySelectorAll('.dropdown-item');
+
+  selected.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.dropdown').forEach(d => {
+      if(d !== dropdown) d.classList.remove('open');
+    });
+    dropdown.classList.toggle('open');
+  });
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      items.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      selected.textContent = item.textContent;
+      selected.dataset.value = item.dataset.value;
+      dropdown.classList.remove('open');
+      if(onChange) onChange(item.dataset.value);
+    });
+  });
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+});
+
+setupDropdown('dropdownLevel', (val) => { currentLevel = val; });
+setupDropdown('dropdownMode', (val) => {
+  currentMode = val;
+  if (val === 'konu') {
+    questionsInput.disabled = true;
+    questionsInput.value = '';
+    questionsInput.placeholder = translations[currentLang].disabledQuestions;
+  } else {
+    questionsInput.disabled = false;
+    questionsInput.placeholder = translations[currentLang].placeholderQuestions;
+  }
+});
+
+
+/* =========================================================
+   GÜNLERİ RENDER ET
+   ========================================================= */
+function renderDays(){
+  const t = translations[currentLang];
+  daysEl.innerHTML = state.days.map((d, i) => `
+    <div class="day-card ${d.selected ? 'active' : ''}" data-i="${i}">
+      <div class="day-top">
+        <span class="day-name">${t.days[i].short}</span>
+        <span class="day-tick">✓</span>
+      </div>
+      <div class="day-hours">
+        <button class="step" data-act="minus" data-i="${i}" type="button">−</button>
+        <div class="hval-wrap">
+          <input class="hval-input" type="number" data-i="${i}" value="${d.minutes}" min="15" max="720">
+          <span class="hval-unit">${t.min}</span>
+        </div>
+        <button class="step" data-act="plus" data-i="${i}" type="button">+</button>
+      </div>
+    </div>
+  `).join('');
+  updateTotal();
+}
+
+function updateTotal(){
+  const totalMin = state.days.reduce((s, d) => s + (d.selected ? d.minutes : 0), 0);
+  totalHoursEl.textContent = fmtDuration(totalMin / 60, currentLang);
+}
+
+daysEl.addEventListener('click', (e) => {
+  const stepBtn = e.target.closest('.step');
+  if (stepBtn){
+    e.stopPropagation();
+    const i = +stepBtn.dataset.i;
+    const d = state.days[i];
+    
+    if (stepBtn.dataset.act === 'plus') d.minutes = Math.min(720, d.minutes + 15);
+    else d.minutes = Math.max(15, d.minutes - 15);
+    
+    const input = daysEl.querySelector(`.hval-input[data-i="${i}"]`);
+    if (input) input.value = d.minutes;
+    
+    updateTotal();
+    return;
+  }
+  
+  const card = e.target.closest('.day-card');
+  if (card && !e.target.closest('.day-hours')){
+    const i = +card.dataset.i;
+    state.days[i].selected = !state.days[i].selected;
+    card.classList.toggle('active', state.days[i].selected);
+    updateTotal();
+  }
+});
+
+// Kullanıcı manuel yazdığında (örneğin 45, 90) güncellenmesi için 'change' dinleyicisi
+daysEl.addEventListener('change', (e) => {
+  if (e.target.classList.contains('hval-input')) {
+    let val = parseInt(e.target.value);
+    if (isNaN(val) || val < 15) val = 15;
+    if (val > 720) val = 720;
+    
+    e.target.value = val;
+    state.days[+e.target.dataset.i].minutes = val;
+    updateTotal();
+  }
+});
+
+/* =========================================================
+   DERSLERİ RENDER ET
+   ========================================================= */
+function renderSubjects(){
+  const t = translations[currentLang];
+  if (state.subjects.length === 0){
+    subjectListEl.innerHTML = `<li class="empty">${t.emptySubjects}</li>`;
+    return;
+  }
+  subjectListEl.innerHTML = state.subjects.map((s, i) => {
+    const color = PALETTE[i % PALETTE.length];
+    const lvClass = s.level >= 5 ? 'lv5' : (s.level === 4 ? 'lv4' : '');
+    const modeClass = s.mode === 'soru' ? 'mode-soru' : (s.mode === 'karma' ? 'mode-karma' : '');
+    
+    let qBadge = '';
+    if (s.mode !== 'konu' && s.targetQ > 0) {
+      qBadge = `<span class="tag tag-target">${currentLang === 'tr' ? 'Hedef' : 'Target'}: ${s.targetQ}</span>`;
+    }
+    
+    return `
+      <li class="subject-item">
+        <span class="dot" style="background:${color}"></span>
+        <span class="sname">${escapeHtml(s.name)}</span>
+        <div class="tags-wrap">
+          <span class="tag ${lvClass}">${t.levels[s.level]}</span>
+          <span class="tag ${modeClass}">${t.modes[s.mode]}</span>
+          ${qBadge}
+        </div>
+        <button class="del" data-id="${s.id}" type="button" title="Kaldır">×</button>
+      </li>
+    `;
+  }).join('');
+}
+
+function addSubject(){
+  const t = translations[currentLang];
+  const name = nameInput.value.trim();
+  if (!name) { nameInput.focus(); return; }
+  if (state.subjects.length >= 12){
+    showAlert(t.errorMaxSubject);
+    return;
+  }
+  if (state.subjects.some(s => s.name.toLowerCase() === name.toLowerCase())){
+    showAlert(t.errorExistSubject);
+    return;
+  }
+
+  const targetQ = (currentMode === 'konu') ? 0 : (parseInt(questionsInput.value) || 0);
+
+  state.subjects.push({
+    id: 's' + Date.now() + Math.random().toString(16).slice(2),
+    name: name,
+    level: +currentLevel,
+    mode: currentMode,
+    targetQ: targetQ
+  });
+  
+  nameInput.value = '';
+  questionsInput.value = '';
+  nameInput.focus();
+  clearAlert();
+  renderSubjects();
+}
+
+addBtn.addEventListener('click', addSubject);
+nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
+
+subjectListEl.addEventListener('click', (e) => {
+  const del = e.target.closest('.del');
+  if (!del) return;
+  state.subjects = state.subjects.filter(s => s.id !== del.dataset.id);
+  renderSubjects();
+});
+
+startInput.addEventListener('change', () => { state.start = startInput.value || '16:00'; });
+
+/* =========================================================
+   YARDIMCI FONKSİYONLAR
+   ========================================================= */
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function showAlert(msg){
+  alertBox.innerHTML = `<div class="alert">${escapeHtml(msg)}</div>`;
+}
+function clearAlert(){ alertBox.innerHTML = ''; }
+
+function parseTime(t){
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+function fmtTime(min){
+  const h = Math.floor(min / 60) % 24;
+  const m = Math.round(min % 60);
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+function fmtDuration(hours, lang){
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  if (h === 0) return m + (lang==='tr' ? ' dk' : ' min');
+  if (m === 0) return h + (lang==='tr' ? ' sa' : ' hr');
+  return h + (lang==='tr' ? ' sa ' : ' hr ') + m + (lang==='tr' ? ' dk' : ' min');
+}
+
+/* =========================================================
+   PLANLAMA MOTORU
+   ========================================================= */
+
+function buildSequence(counts){
+  const remaining = counts.slice();
+  const seq = [];
+  let prev = -1;
+  const total = remaining.reduce((a, b) => a + b, 0);
+
+  for (let t = 0; t < total; t++){
+    let best = -1;
+    for (let i = 0; i < remaining.length; i++){
+      if (remaining[i] <= 0) continue;
+      if (i === prev) continue;
+      if (best === -1 || remaining[i] > remaining[best]) best = i;
+    }
+    if (best === -1){
+      for (let i = 0; i < remaining.length; i++){
+        if (remaining[i] > 0){ best = i; break; }
+      }
+    }
+    if (best === -1) break;
+    seq.push(best);
+    remaining[best]--;
+    prev = best;
+  }
+  return seq;
+}
+
+function allocateSlots(weights, totalSlots){
+  const n = weights.length;
+  const W = weights.reduce((a, b) => a + b, 0);
+  const raw = weights.map(w => (totalSlots * w) / W);
+  const counts = raw.map(r => Math.floor(r));
+
+  let used = counts.reduce((a, b) => a + b, 0);
+  let remainder = totalSlots - used;
+
+  const fracs = raw
+    .map((r, i) => ({ i, f: r - Math.floor(r) }))
+    .sort((a, b) => b.f - a.f);
+
+  let k = 0;
+  while (remainder > 0 && n > 0){
+    counts[fracs[k % n].i]++;
+    remainder--;
+    k++;
+  }
+
+  if (totalSlots >= n){
+    for (let i = 0; i < n; i++){
+      if (counts[i] === 0){
+        let maxI = 0;
+        for (let j = 1; j < n; j++) if (counts[j] > counts[maxI]) maxI = j;
+        if (counts[maxI] > 1){
+          counts[maxI]--;
+          counts[i]++;
+        }
+      }
+    }
+  }
+  return counts;
+}
+
+function generatePlan(){
+  const t = translations[currentLang];
+  clearAlert();
+
+  const activeDays = [];
+  state.days.forEach((d, i) => {
+    if (d.selected && d.minutes > 0){
+      activeDays.push({ index: i, full: t.days[i].full, minutes: d.minutes });
+    }
+  });
+
+  if (activeDays.length === 0){
+    showAlert(t.errorDay);
+    return;
+  }
+  if (state.subjects.length === 0){
+    showAlert(t.errorSubject);
+    return;
+  }
+
+  const sessionTotalMinutes = state.focus + state.break;
+  let totalSlots = 0;
+  activeDays.forEach(d => {
+    d.sessionsCount = Math.floor(d.minutes / sessionTotalMinutes);
+    totalSlots += d.sessionsCount;
+  });
+
+  const warnings = [];
+
+  if (totalSlots < state.subjects.length){
+    warnings.push(t.warnNotEnoughTime);
+  }
+
+  const weights = state.subjects.map(s => s.level);
+  const counts = allocateSlots(weights, totalSlots);
+  const sequence = buildSequence(counts);
+
+  let cursor = 0;
+  const plan = activeDays.map(d => {
+    const sessions = [];
+    for (let h = 0; h < d.sessionsCount && cursor < sequence.length; h++){
+      sessions.push(sequence[cursor]);
+      cursor++;
+    }
+    return { ...d, sessions };
+  });
+
+  const subjectSessionCounts = {};
+  sequence.forEach(idx => {
+    subjectSessionCounts[idx] = (subjectSessionCounts[idx] || 0) + 1;
+  });
+
+  const sessionQTargets = {}; 
+  state.subjects.forEach((sub, idx) => {
+    const totalSessionsForSub = subjectSessionCounts[idx] || 0;
+    if (totalSessionsForSub === 0 || sub.targetQ === 0) return;
+    
+    const baseQ = Math.floor(sub.targetQ / totalSessionsForSub);
+    let remainderQ = sub.targetQ % totalSessionsForSub;
+    
+    const targets = [];
+    for(let i=0; i<totalSessionsForSub; i++) {
+      let q = baseQ;
+      if(remainderQ > 0) { q++; remainderQ--; }
+      targets.push(q);
+    }
+    sessionQTargets[idx] = targets;
+  });
+
+  lastPlanData = { plan, counts, totalSlots, warnings, sessionQTargets };
+  renderPlan(lastPlanData);
+}
+
+/* =========================================================
+   SONUÇ EKRANI
+   ========================================================= */
+function renderPlan({ plan, counts, totalSlots, warnings, sessionQTargets }){
+  const t = translations[currentLang];
+  const baseMinutes = parseTime(state.start);
+  const subjects = state.subjects;
+  const sessionTotalMinutes = state.focus + state.break;
+  
+  const totalHoursDecimal = totalSlots * state.focus / 60;
+  const activeDayCount = plan.filter(d => d.sessions.length > 0).length;
+
+  let html = '<div class="result-in">';
+
+  if (warnings.length){
+    html += `<div class="alert alert-warning" style="max-width:none;margin-bottom:20px;">
+      ⚠️ ${escapeHtml(warnings[0])}
+    </div>`;
+  }
+
+  html += `
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">${fmtDuration(totalHoursDecimal, currentLang)}</div>
+        <div class="stat-label">${t.statWeeklyHours}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">${activeDayCount} ${currentLang === 'tr' ? 'Gün' : 'Days'}</div>
+        <div class="stat-label">${t.statPlannedDays}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">${subjects.length}</div>
+        <div class="stat-label">${t.statSubjects}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">${totalSlots}</div>
+        <div class="stat-label">${t.statTotalSessions}</div>
+      </div>
+    </div>
+  `;
+
+  html += '<div class="dist">';
+  html += `<div class="dist-title">${t.distTitle}</div>`;
+
+  subjects.forEach((s, i) => {
+    const c = counts[i] || 0;
+    if (c === 0 && totalSlots >= subjects.length) return;
+    const pct = totalSlots > 0 ? Math.round((c / totalSlots) * 100) : 0;
+    const color = PALETTE[i % PALETTE.length];
+    const mins = c * state.focus;
+    html += `
+      <div class="dist-row">
+        <div class="dist-name">${escapeHtml(s.name)}</div>
+        <div class="dist-track">
+          <div class="dist-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+        <div class="dist-val">${fmtDuration(mins / 60, currentLang)}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+
+  html += '<div class="plan-grid">';
+  plan.forEach((d, dayIndex) => {
+    if (d.sessions.length === 0) return;
+    
+    html += `
+      <div class="day-block">
+        <div class="db-head">
+          <span class="db-name">${d.full}</span>
+          <span class="db-meta">${d.sessions.length} ${t.daySession} · ${fmtDuration((d.sessions.length * state.focus) / 60, currentLang)}</span>
+        </div>
+    `;
+    
+    d.sessions.forEach((sIdx, j) => {
+      const startMin = baseMinutes + j * sessionTotalMinutes;
+      const endMin = startMin + state.focus;
+      const s = subjects[sIdx];
+      const color = PALETTE[sIdx % PALETTE.length];
+      
+      let modeColor = color;
+      if (s.mode === 'soru') modeColor = '#10b981';
+      if (s.mode === 'karma') modeColor = '#8b5cf6';
+
+      html += `
+        <div class="srow" id="row-${dayIndex}-${j}">
+          <div class="check-box" onclick="toggleComplete(this, 'row-${dayIndex}-${j}')">
+            <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <span class="stime">${fmtTime(startMin)} - ${fmtTime(endMin)}</span>
+          <span class="spill" style="background:${color}15;border-left-color:${color};color:${color};">
+            <span class="spill-text">${escapeHtml(s.name)}</span>
+            <span class="spill-mode" id="q-label-${dayIndex}-${j}" style="color:${modeColor}">${t.modes[s.mode]}</span>
+          </span>
+        </div>
+      `;
+      
+      if (j < d.sessions.length - 1){
+        html += `<div class="sbreak"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${state.break} ${t.breakText}</div>`;
+      }
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += `
+    <div class="result-actions no-print">
+      <button class="btn-ghost" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        ${t.btnPrint}
+      </button>
+      <button class="btn-ghost" onclick="document.getElementById('result').innerHTML=''; lastPlanData=null; window.scrollTo({top: 0, behavior: 'smooth'});">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l5.77-5.76"/></svg>
+        ${t.btnNewPlan}
+      </button>
+    </div>
+    <div class="note no-print" style="text-align:center; font-size:11.5px; color:var(--text-muted); margin-top:16px;">
+      ${t.noteCheck}
+    </div>
+  `;
+
+  html += '</div>';
+  resultEl.innerHTML = html;
+
+  let qCounters = {};
+  plan.forEach((d, dayIndex) => {
+    d.sessions.forEach((sIdx, j) => {
+      const s = subjects[sIdx];
+      if (s.mode !== 'konu' && s.targetQ > 0 && sessionQTargets[sIdx]) {
+        if (qCounters[sIdx] === undefined) qCounters[sIdx] = 0;
+        const qAmount = sessionQTargets[sIdx][qCounters[sIdx]];
+        if (qAmount !== undefined) {
+          const label = document.getElementById(`q-label-${dayIndex}-${j}`);
+          if (label) {
+            label.textContent = `${qAmount} ${currentLang === 'tr' ? 'Soru' : 'Questions'}`; 
+          }
+        }
+        qCounters[sIdx]++;
+      }
+    });
+  });
+
+  if (!document.getElementById('result').innerHTML.includes('result-in')) {
+     resultEl.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+}
+
+window.toggleComplete = function(el, rowId) {
+  el.classList.toggle('checked');
+  const row = document.getElementById(rowId);
+  if (el.classList.contains('checked')) {
+    row.classList.add('completed');
+  } else {
+    row.classList.remove('completed');
+  }
+};
+
+/* =========================================================
+   YÜKLENİYOR AKIŞI
+   ========================================================= */
+generateBtn.addEventListener('click', () => {
+  const t = translations[currentLang];
+  const anyDay = state.days.some(d => d.selected);
+  if (!anyDay){ showAlert(t.errorDay); return; }
+  if (state.subjects.length === 0){ showAlert(t.errorSubject); return; }
+
+  clearAlert();
+  resultEl.innerHTML = '';
+  lastPlanData = null;
+  loadingEl.classList.add('show');
+  loadingEl.scrollIntoView({ behavior:'smooth', block:'center' });
+
+  let step = 0;
+  loadingText.textContent = t.loadingMsgs[0];
+
+  const interval = setInterval(() => {
+    step++;
+    if (step < t.loadingMsgs.length) loadingText.textContent = t.loadingMsgs[step];
+  }, 300);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    loadingEl.classList.remove('show');
+    generatePlan();
+  }, 1500);
+});
+
+setLang('tr'); 
+</script>
+</body>
+</html>
